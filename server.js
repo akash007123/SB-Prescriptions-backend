@@ -19,10 +19,27 @@ app.use(express.json());
 
 // Routes
 
-// GET /api/prescriptions - Get all prescriptions
+// GET /api/prescriptions - Get all prescriptions with optional filters
 app.get('/api/prescriptions', async (req, res) => {
   try {
-    const prescriptions = await Prescription.find();
+    const { search, fromDate, toDate } = req.query;
+    let query = {};
+
+    if (search) {
+      query['patientData.name'] = { $regex: search, $options: 'i' };
+    }
+
+    if (fromDate || toDate) {
+      query['patientData.date'] = {};
+      if (fromDate) {
+        query['patientData.date'].$gte = fromDate;
+      }
+      if (toDate) {
+        query['patientData.date'].$lte = toDate;
+      }
+    }
+
+    const prescriptions = await Prescription.find(query);
     res.json(prescriptions);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch prescriptions' });
