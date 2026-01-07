@@ -32,10 +32,10 @@ app.get('/api/prescriptions', async (req, res) => {
     if (fromDate || toDate) {
       query['patientData.date'] = {};
       if (fromDate) {
-        query['patientData.date'].$gte = fromDate;
+        query['patientData.date'].$gte = new Date(fromDate);
       }
       if (toDate) {
-        query['patientData.date'].$lte = toDate;
+        query['patientData.date'].$lte = new Date(toDate);
       }
     }
 

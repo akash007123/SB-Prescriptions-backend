@@ -11,7 +11,8 @@ const patientDataSchema = new mongoose.Schema({
   age: String,
   gender: String,
   diagnosis: String,
-  date: String,
+  date: Date,
+  place: String,
 });
 
 const prescriptionSchema = new mongoose.Schema({
